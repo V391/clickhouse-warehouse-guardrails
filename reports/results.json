@@ -1,0 +1,196 @@
+{
+  "stream": {
+    "valid_events": 1674082,
+    "quarantined_null_visitor": 5112,
+    "quarantined_future_time": 806,
+    "late_events": 31121,
+    "duplicates_sent": 25193,
+    "messages_sent": 1705193,
+    "days": 14
+  },
+  "loads": [
+    {
+      "load": "backfill_days_01_10",
+      "messages": 1211893,
+      "ok": true,
+      "seconds": 62,
+      "since": "2026-11-19 00:42:51.477",
+      "sent": 1211893,
+      "raw_rows": 1211893,
+      "dead_letter": 0,
+      "freshness_ok": true,
+      "build": {
+        "ok": true,
+        "statuses": {
+          "success": 4,
+          "pass": 14
+        },
+        "failed": [],
+        "skipped": []
+      }
+    },
+    {
+      "load": "day_11",
+      "messages": 121873,
+      "ok": true,
+      "seconds": 33,
+      "since": "2026-11-19 00:43:43.863",
+      "sent": 121873,
+      "raw_rows": 121873,
+      "dead_letter": 0,
+      "freshness_ok": true,
+      "build": {
+        "ok": true,
+        "statuses": {
+          "success": 4,
+          "pass": 14
+        },
+        "failed": [],
+        "skipped": []
+      }
+    },
+    {
+      "load": "day_12",
+      "messages": 121793,
+      "ok": true,
+      "seconds": 35,
+      "since": "2026-11-19 00:44:16.851",
+      "sent": 121793,
+      "raw_rows": 121793,
+      "dead_letter": 0,
+      "freshness_ok": true,
+      "build": {
+        "ok": true,
+        "statuses": {
+          "success": 4,
+          "pass": 14
+        },
+        "failed": [],
+        "skipped": []
+      }
+    },
+    {
+      "load": "day_13",
+      "messages": 121796,
+      "ok": true,
+      "seconds": 29,
+      "since": "2026-11-19 00:44:51.547",
+      "sent": 121796,
+      "raw_rows": 121796,
+      "dead_letter": 0,
+      "freshness_ok": true,
+      "build": {
+        "ok": true,
+        "statuses": {
+          "success": 4,
+          "pass": 14
+        },
+        "failed": [],
+        "skipped": []
+      }
+    },
+    {
+      "load": "day_14",
+      "messages": 127838,
+      "ok": true,
+      "seconds": 34,
+      "since": "2026-11-19 00:45:20.867",
+      "sent": 127838,
+      "raw_rows": 127838,
+      "dead_letter": 0,
+      "freshness_ok": true,
+      "build": {
+        "ok": true,
+        "statuses": {
+          "success": 4,
+          "pass": 14
+        },
+        "failed": [],
+        "skipped": []
+      }
+    }
+  ],
+  "full_refresh_ok": true,
+  "incremental_vs_full": {
+    "stg_identification_events": {
+      "rows": 1674082,
+      "differing_rows": 0
+    },
+    "stg_identification_events_quarantine": {
+      "rows": 5918,
+      "differing_rows": 0
+    },
+    "mart_customer_daily": {
+      "rows": 5600,
+      "differing_rows": 0
+    },
+    "mart_bot_traffic_daily": {
+      "rows": 210,
+      "differing_rows": 0
+    }
+  },
+  "answer_key": {
+    "customer_days": 5600,
+    "matching": 5600,
+    "mismatched": [],
+    "staged": 1674082,
+    "expected_staged": 1674082,
+    "quarantined": {
+      "null_visitor_id": 5112,
+      "event_time_in_future": 806
+    },
+    "expected_quarantined": {
+      "null_visitor_id": 5112,
+      "event_time_in_future": 806
+    }
+  },
+  "defects": [
+    {
+      "scenario": "Consumer group reset: yesterday's batch delivered again",
+      "expected": "absorbed: dedupe keeps marts identical",
+      "load_ok": true,
+      "caught_by": null,
+      "marts_unchanged": true,
+      "error": null
+    },
+    {
+      "scenario": "SDK release fails to identify 25% of its visitors",
+      "expected": "blocked by gate_null_visitor_rate",
+      "load_ok": false,
+      "caught_by": "gate_null_visitor_rate",
+      "marts_unchanged": true,
+      "error": "GateFailed: gates failed: ['gate_null_visitor_rate']; not published: ['assert_mart_customer_day_unique', 'assert_mart_reconciles_to_staging', 'mart_bot_traffic_daily', 'mart_customer_daily', 'not_null_mart_customer_daily_event_date', 'not_null_mart_customer_daily_subscription_id']"
+    },
+    {
+      "scenario": "Client clock skew: 3% of events stamped a year ahead",
+      "expected": "blocked by gate_future_event_rate",
+      "load_ok": false,
+      "caught_by": "gate_future_event_rate",
+      "marts_unchanged": true,
+      "error": "GateFailed: gates failed: ['gate_future_event_rate']; not published: ['assert_mart_customer_day_unique', 'assert_mart_reconciles_to_staging', 'mart_bot_traffic_daily', 'mart_customer_daily', 'not_null_mart_customer_daily_event_date', 'not_null_mart_customer_daily_subscription_id']"
+    },
+    {
+      "scenario": "Poison message: a word where a number belongs",
+      "expected": "dead lettered, blocked by gate_dead_letter",
+      "load_ok": false,
+      "caught_by": "gate_dead_letter",
+      "marts_unchanged": true,
+      "error": "GateFailed: gates failed: ['gate_dead_letter']; not published: ['assert_mart_customer_day_unique', 'assert_mart_reconciles_to_staging', 'mart_bot_traffic_daily', 'mart_customer_daily', 'not_null_mart_customer_daily_event_date', 'not_null_mart_customer_daily_subscription_id']"
+    },
+    {
+      "scenario": "Consumer stalled (materialized views detached)",
+      "expected": "blocked before dbt: not every message landed",
+      "load_ok": false,
+      "caught_by": "wait_until_landed (load completeness)",
+      "marts_unchanged": true,
+      "error": "LoadIncomplete: 0 of 40,600 messages landed in ClickHouse",
+      "recovered_messages": 40600,
+      "recovered_build_ok": true,
+      "published_after_recovery": true
+    }
+  ],
+  "dbt_checks": {
+    "success": 4,
+    "pass": 14
+  }
+}

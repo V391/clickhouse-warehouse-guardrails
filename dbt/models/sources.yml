@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: Landed from Kafka by the ClickHouse Kafka engine. Every delivery is kept, duplicates included.
+    tables:
+      - name: identification_events
+        description: One row per Kafka message delivered. Not deduplicated.
+        config:
+          loaded_at_field: _ingested_at
+          freshness:
+            warn_after: { count: 30, period: minute }
+            error_after: { count: 2, period: hour }
+      - name: dead_letter
+        description: Messages the Kafka engine could not parse, with the parser error.

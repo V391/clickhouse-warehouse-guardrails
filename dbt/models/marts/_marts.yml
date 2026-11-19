@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: mart_customer_daily
+    description: Requests, unique visitors and bot/VPN/incognito counts per customer per day.
+    columns:
+      - name: subscription_id
+        data_tests: [not_null]
+      - name: event_date
+        data_tests: [not_null]
+      - name: requests
+        description: Deduplicated identification requests.
+      - name: unique_visitors
+        description: Exact distinct visitor ids that day.
+
+  - name: mart_bot_traffic_daily
+    description: Bad bot and VPN share of requests per country per day.
+    columns:
+      - name: bad_bot_share
+        description: bad_bot_requests / requests.

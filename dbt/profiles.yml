@@ -1,0 +1,20 @@
+guardrails:
+  target: dev
+  outputs:
+    dev:
+      type: clickhouse
+      host: "{{ env_var('CH_HOST', 'localhost') }}"
+      port: "{{ env_var('CH_PORT', '8123') | int }}"
+      user: "{{ env_var('CH_USER', 'demo') }}"
+      password: "{{ env_var('CH_PASSWORD', 'demo') }}"
+      schema: analytics
+      threads: 4
+    # Same models built from scratch in one go, to prove the incremental path gives the same answer.
+    full:
+      type: clickhouse
+      host: "{{ env_var('CH_HOST', 'localhost') }}"
+      port: "{{ env_var('CH_PORT', '8123') | int }}"
+      user: "{{ env_var('CH_USER', 'demo') }}"
+      password: "{{ env_var('CH_PASSWORD', 'demo') }}"
+      schema: analytics_full
+      threads: 4

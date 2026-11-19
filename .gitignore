@@ -1,0 +1,10 @@
+.venv/
+data/
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/.user.yml
+logs/
+__pycache__/
+.pytest_cache/
+reports/*.log

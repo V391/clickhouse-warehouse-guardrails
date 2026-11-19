@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: stg_identification_events
+    description: One row per identification request. Deduplicated on request_id, typed, partitioned by event day.
+    columns:
+      - name: request_id
+        description: Unique per identification call. The Kafka redelivery key.
+        data_tests: [not_null, unique]
+      - name: visitor_id
+        description: Stable browser/device identifier. Rows without one are quarantined, never kept here.
+        data_tests: [not_null]
+      - name: subscription_id
+        description: The customer account the request was made under.
+        data_tests: [not_null]
+      - name: event_time
+        description: When the identification happened, by the device clock.
+      - name: bot_result
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["notDetected", "good", "bad"]
+      - name: _ingested_at
+        description: When ClickHouse consumed the latest delivery of this request.
+
+  - name: stg_identification_events_quarantine
+    description: Requests held out of staging with the reason (null_visitor_id or event_time_in_future).
+    columns:
+      - name: reason
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["null_visitor_id", "event_time_in_future"]

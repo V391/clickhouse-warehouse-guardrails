@@ -1,0 +1,138 @@
+{
+  "rows": 100000000,
+  "customer": "sub_0003",
+  "timings": {
+    "naive_insert_s": 10.5,
+    "tuned_insert_s": 11.8
+  },
+  "storage": {
+    "events_tuned": {
+      "rows": 100000000,
+      "compressed": 3896040069,
+      "uncompressed": 7993988612,
+      "pk_mem": 502000,
+      "parts": 90
+    },
+    "events_naive": {
+      "rows": 100000000,
+      "compressed": 7417997584,
+      "uncompressed": 14368935535,
+      "pk_mem": 354728,
+      "parts": 1
+    },
+    "customer_daily_rollup": {
+      "rows": 36000,
+      "compressed": 298051446,
+      "uncompressed": 297246973,
+      "pk_mem": 36,
+      "parts": 3
+    },
+    "bloom_index_bytes": 125543351
+  },
+  "storage_before_index": {
+    "events_tuned": {
+      "rows": 100000000,
+      "compressed": 3896040069,
+      "uncompressed": 7993988612,
+      "pk_mem": 502000,
+      "parts": 90
+    },
+    "events_naive": {
+      "rows": 100000000,
+      "compressed": 7417997584,
+      "uncompressed": 14368935535,
+      "pk_mem": 354728,
+      "parts": 1
+    },
+    "customer_daily_rollup": {
+      "rows": 36000,
+      "compressed": 298051446,
+      "uncompressed": 297246973,
+      "pk_mem": 36,
+      "parts": 3
+    },
+    "bloom_index_bytes": 0
+  },
+  "queries": {
+    "Q1 customer dashboard: requests and unique visitors per day, one customer, 30 days": {
+      "events_naive": {
+        "ms": 2885,
+        "rows_read": 100000000,
+        "bytes_read": 3500005120,
+        "memory": 43313889,
+        "result_rows": 30
+      },
+      "events_tuned": {
+        "ms": 155,
+        "rows_read": 981701,
+        "bytes_read": 37302973,
+        "memory": 17591277,
+        "result_rows": 30
+      },
+      "rollup": {
+        "ms": 219,
+        "rows_read": 8192,
+        "bytes_read": 28144,
+        "memory": 39477238,
+        "visitor_error_max": 0.0,
+        "result_rows": 30
+      }
+    },
+    "Q2 fraud investigation: every request from one visitor of one customer": {
+      "events_naive": {
+        "ms": 3929,
+        "rows_read": 100000000,
+        "bytes_read": 5349700934,
+        "memory": 93730351,
+        "result_rows": 1227
+      },
+      "events_tuned": {
+        "ms": 187,
+        "rows_read": 2217493,
+        "bytes_read": 72678599,
+        "memory": 466728,
+        "result_rows": 1227
+      }
+    },
+    "Q3 support lookup: one request by request_id": {
+      "events_naive": {
+        "ms": 8,
+        "rows_read": 8192,
+        "bytes_read": 845949,
+        "memory": 0,
+        "result_rows": 1
+      },
+      "events_tuned": {
+        "ms": 2159,
+        "rows_read": 100000000,
+        "bytes_read": 2900171483,
+        "memory": 397184,
+        "result_rows": 1
+      },
+      "events_tuned+bloom": {
+        "ms": 57,
+        "rows_read": 775464,
+        "bytes_read": 22655415,
+        "memory": 118544,
+        "result_rows": 1
+      }
+    },
+    "Q4 bot share by country, all customers, last 7 days": {
+      "events_naive": {
+        "ms": 539,
+        "rows_read": 100000000,
+        "bytes_read": 1035771717,
+        "memory": 6838024,
+        "result_rows": 15
+      },
+      "events_tuned": {
+        "ms": 132,
+        "rows_read": 7776124,
+        "bytes_read": 77761240,
+        "memory": 5673090,
+        "result_rows": 15
+      }
+    }
+  },
+  "clickhouse": "24.8.14.39"
+}

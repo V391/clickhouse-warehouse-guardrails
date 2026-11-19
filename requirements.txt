@@ -1,0 +1,7 @@
+dbt-core==1.12.7
+dbt-clickhouse==1.10.3
+prefect==3.9.3
+confluent-kafka==2.16.2
+clickhouse-connect==1.13.0
+numpy==2.5.5
+pytest==9.2.0
